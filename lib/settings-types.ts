@@ -153,6 +153,7 @@ export type ApiConfig = {
     enableImageRecognition: boolean;
     enableImageGeneration: boolean;
     preventEmptyGenerateRambling?: boolean;
+    streamingMode?: "auto" | "force-stream" | "force-no-stream";
 };
 
 // --- VoiceApiConfig (migrated from voice-settings.tsx) ---

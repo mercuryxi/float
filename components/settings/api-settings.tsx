@@ -445,6 +445,19 @@ export function ApiSettings() {
                                             />
                                         </div>
 
+                                        <div className="flex flex-col gap-1 mt-2">
+                                            <label className="menu-desc ml-1">流式响应控制</label>
+                                            <select
+                                                value={config.streamingMode || "auto"}
+                                                onChange={(e) => updateConfig(config.id, { streamingMode: e.target.value as any })}
+                                                className="ui-select"
+                                            >
+                                                <option value="auto">自动 (Auto)</option>
+                                                <option value="force-stream">强制流式 (Force Stream)</option>
+                                                <option value="force-no-stream">强制非流式 (Force No-Stream)</option>
+                                            </select>
+                                        </div>
+
                                     </>
                                 )
                             })()}

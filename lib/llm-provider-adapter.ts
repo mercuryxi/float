@@ -529,7 +529,10 @@ function buildOpenAICompatibleRequest(
     ) {
         body.max_tokens = Math.floor(options.maxTokens);
     }
-    if (options.stream) body.stream = true;
+    if (config.streamingMode === "force-stream") body.stream = true;
+    else if (config.streamingMode === "force-no-stream") body.stream = false;
+    else if (options.stream) body.stream = true;
+
     if (options.tools?.length) {
         body.tools = options.tools.map((tool) => ({
             type: "function",
@@ -582,7 +585,10 @@ function buildAnthropicRequest(
     if (preset && enabled.has("top_p")) body.top_p = preset.top_p ?? 1;
     if (enabled.has("top_k")) body.top_k = preset?.top_k ?? 0;
     if (system) body.system = system;
-    if (options.stream) body.stream = true;
+    if (config.streamingMode === "force-stream") body.stream = true;
+    else if (config.streamingMode === "force-no-stream") body.stream = false;
+    else if (options.stream) body.stream = true;
+
     if (options.tools?.length) {
         body.tools = options.tools.map((tool) => ({
             name: tool.name,
@@ -673,7 +679,8 @@ function buildGeminiRequest(
             })),
         }];
     }
-    const method = options.stream
+    const forceStream = config.streamingMode === "force-stream" || (options.stream && config.streamingMode !== "force-no-stream");
+    const method = forceStream
         ? `streamGenerateContent?alt=sse&key=${encodeURIComponent(config.apiKey)}`
         : `generateContent?key=${encodeURIComponent(config.apiKey)}`;
     return {
